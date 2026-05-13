@@ -32,7 +32,7 @@ else:
 
 from kivymd.uix.tab import MDTabsItemText, MDTabsPrimary
 
-SOURCE_CODE_URL = "https://github.com/ermuhanovdias/MortgageCalculator"
+SOURCE_CODE_URL = "https://github.com/Tumanchi/mortgage-calculator.git"
 PREFS_FILENAME = "mortgage_app_settings.json"
 
 STRINGS: dict[str, dict[str, str]] = {
@@ -58,10 +58,10 @@ STRINGS: dict[str, dict[str, str]] = {
         "nav_lang_en": "English",
         "params_title": "Параметры кредита",
         "hint_start_date": "Дата начала",
-        "hint_property_price": "Стоимость недвижимости, ₽",
+        "hint_property_price": "Стоимость недвижимости, KZT",
         "hint_term_years": "Срок кредита, лет",
-        "hint_loan_amount": "Сумма кредита, ₽",
-        "hint_down_payment": "Первоначальный взнос, ₽",
+        "hint_loan_amount": "Сумма кредита, KZT",
+        "hint_down_payment": "Первоначальный взнос, KZT",
         "hint_rate": "Ставка, % годовых",
         "hint_payment_type": "Тип платежа",
         "btn_calculate": "Рассчитать",
@@ -130,10 +130,10 @@ STRINGS: dict[str, dict[str, str]] = {
         "nav_lang_en": "English",
         "params_title": "Loan parameters",
         "hint_start_date": "Start date",
-        "hint_property_price": "Property price, ₽",
+        "hint_property_price": "Property price, KZT",
         "hint_term_years": "Loan term, years",
-        "hint_loan_amount": "Loan amount, ₽",
-        "hint_down_payment": "Down payment, ₽",
+        "hint_loan_amount": "Loan amount, KZT",
+        "hint_down_payment": "Down payment, KZT",
         "hint_rate": "Interest rate, % p.a.",
         "hint_payment_type": "Payment type",
         "btn_calculate": "Calculate",
@@ -186,7 +186,7 @@ STRINGS: dict[str, dict[str, str]] = {
 def _fmt_rub(value: float) -> str:
     """Format amount as integer rubles with spaces as thousands separators."""
     s = f"{round(value):,}".replace(",", " ")
-    return f"{s} ₽"
+    return f"{s} KZT"
 
 
 def _fmt_pct(value: float) -> str:
@@ -452,7 +452,7 @@ MDScreen:
                                             icon: "home-variant-outline"
                                         MDTextFieldHintText:
                                             id: hint_property_price
-                                            text: "Стоимость недвижимости, ₽"
+                                            text: "Стоимость недвижимости, KZT"
 
                                     MDTextField:
                                         id: field_term_years
@@ -476,7 +476,7 @@ MDScreen:
                                             icon: "cash"
                                         MDTextFieldHintText:
                                             id: hint_loan_amount
-                                            text: "Сумма кредита, ₽"
+                                            text: "Сумма кредита, KZT"
 
                                     MDTextField:
                                         id: field_down_payment
@@ -488,7 +488,7 @@ MDScreen:
                                             icon: "wallet-outline"
                                         MDTextFieldHintText:
                                             id: hint_down_payment
-                                            text: "Первоначальный взнос, ₽"
+                                            text: "Первоначальный взнос, KZT"
 
                                     # Bottom row: icon on the left field only (same pattern as Interest / Payment type).
                                     MDBoxLayout:

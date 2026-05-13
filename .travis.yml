@@ -1,0 +1,78 @@
+# Travis CI: build TWO debug APKs (32-bit armeabi-v7a + 64-bit arm64-v8a) in one pipeline.
+#
+# Flow (matches lesson): wipe .buildozer between architectures; copy arch-specific spec onto
+# buildozer.spec before each build so the default spec stays in sync with the last target.
+#
+# Setup:
+# 1) Enable repo on https://www.travis-ci.com and sync GitHub.
+# 2) Travis → Settings → Environment variables → GITHUB_TOKEN (PAT with releases permission).
+# 3) Push to main/master → both APKs publish under GitHub Releases.
+
+language: python
+os: linux
+dist: jammy
+python:
+  - "3.10"
+
+addons:
+  apt:
+    update: true
+    packages:
+      - openjdk-17-jdk
+      - git
+      - zip
+      - unzip
+      - autoconf
+      - libtool
+      - pkg-config
+      - zlib1g-dev
+      - libncurses-dev
+      - cmake
+      - libffi-dev
+      - libssl-dev
+      - automake
+      - libltdl-dev
+      - patch
+      - libc6-dev
+
+install:
+  - pip install --upgrade pip
+  - pip install buildozer cython
+
+before_script:
+  - mkdir -p release-apks
+
+script:
+  # Lesson: explicit successful command early so the job shows a green check / exit 0 heartbeat.
+  - echo OK
+  - echo "=== Compile 32-bit (armeabi-v7a) ==="
+  - ls -la
+  - rm -rf .buildozer
+  - cp -f buildozer-32-bit.spec buildozer.spec
+  - travis_wait 150 buildozer android debug
+  - ls -la bin/
+  - cp -f bin/*.apk release-apks/
+  - echo "=== Compile 64-bit (arm64-v8a) ==="
+  - ls -la
+  - rm -rf .buildozer
+  - cp -f buildozer-64-bit.spec buildozer.spec
+  - travis_wait 150 buildozer android debug
+  - ls -la bin/
+  - cp -f bin/*.apk release-apks/
+  - ls -la release-apks/
+
+before_deploy:
+  - ls -la release-apks/
+
+# Buildozer [app] version (APK name suffix): 1.3 — bump together with buildozer-32-bit.spec / buildozer-64-bit.spec
+deploy:
+  provider: releases
+  token: $GITHUB_TOKEN
+  file_glob: true
+  file:
+    - release-apks/*.apk
+  skip_cleanup: true
+  on:
+    branch:
+      - master
+      - main
